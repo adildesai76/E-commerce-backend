@@ -17,9 +17,13 @@ export const connectDB = async () => {
     });
 
     console.log(`✅ MongoDB Connected: ${connection.connection.host}`);
-  } catch (error) {
-    console.error(`❌ MongoDB connection failed: ${error.message}`);
+  }catch (error) {
+  console.error(`❌ MongoDB connection failed: ${error.message}`);
+  throw error;
+}
+  // } catch (error) {
+  //   console.error(`❌ MongoDB connection failed: ${error.message}`);
 
-    process.exit(1);
-  }
+  //   process.exit(1);
+  // }
 };

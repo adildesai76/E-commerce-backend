@@ -8,6 +8,7 @@ export const initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
       origin: [
+        "https://cygnushub.netlify.app",
         "http://localhost:3000",
         "http://192.168.2.28:3000",
       ],
