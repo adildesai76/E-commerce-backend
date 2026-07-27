@@ -101,12 +101,13 @@ export const login = async (req, res) => {
     // ✅ Set as httpOnly cookie (Next.js middleware reads this)
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
+      path: "/",
       maxAge:
         user.role === "admin"
-          ? 2 * 60 * 60 * 1000 // 2 hours for admin
-          : 7 * 24 * 60 * 60 * 1000, // 7 days for user
+          ? 2 * 60 * 60 * 1000
+          : 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -137,7 +138,7 @@ export const logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // Use the same value as when setting the cookie
+    sameSite: "none",
   });
 
   return res.status(200).json({
