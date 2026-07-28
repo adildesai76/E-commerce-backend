@@ -122,98 +122,7 @@ const getCart = async (req, res) => {
     });
   }
 };
-// const getCart = async (req, res) => {
-//   try {
-//     const [cart, store] = await Promise.all([
-//       Cart.findOne({ userId: req.user.id }).lean(),
-//       AdminStore.findOne().select("shipping").lean(),
-//     ]);
 
-//     if (!cart) {
-//       return res.status(200).json({
-//         items: [],
-//         summary: {
-//           subtotal: 0,
-//           discount: 0,
-//           couponDiscount: 0,
-//           deliveryCharge: 0,
-//           total: 0,
-//           itemCount: 0,
-//           savings: 0,
-//         },
-//       });
-//     }
-
-//     const summary = cart.items.reduce(
-//       (acc, item) => {
-//         const originalPrice = item.price;
-//         const sellingPrice = item.discountPrice ?? item.price;
-
-//         acc.subtotal += originalPrice * item.quantity;
-//         acc.total += sellingPrice * item.quantity;
-//         acc.itemCount += item.quantity;
-
-//         return acc;
-//       },
-//       {
-//         subtotal: 0,
-//         total: 0,
-//         itemCount: 0,
-//       },
-//     );
-
-//     const productDiscount = summary.subtotal - summary.total;
-
-//     const couponDiscount = cart.appliedCoupon?.discount ?? 0;
-
-//     const discountedTotal = Math.max(
-//       summary.total - couponDiscount,
-//       0,
-//     );
-
-//     const shipping = store?.shipping;
-
-//     let deliveryCharge = 0;
-
-//     if (shipping?.enabled) {
-//       if (
-//         shipping.freeShipping &&
-//         discountedTotal >= shipping.freeShippingAmount
-//       ) {
-//         deliveryCharge = 0;
-//       } else {
-//         deliveryCharge = shipping.defaultCharge ?? 0;
-//       }
-//     }
-
-//     const total = discountedTotal + deliveryCharge;
-
-//     const response = {
-//       ...cart,
-
-//       summary: {
-//         subtotal: summary.subtotal,
-//         discount: productDiscount,
-//         couponDiscount,
-//         deliveryCharge,
-//         total,
-//         itemCount: summary.itemCount,
-//         savings: productDiscount + couponDiscount,
-//       },
-//     };
-
-//     return res.status(200).json(response);
-//   } catch (error) {
-//     console.error("[CART GET]", error);
-
-//     return res.status(500).json({
-//       error: "Failed to fetch cart",
-//     });
-//   }
-// };
-
-// ─── POST /api/cart ───────────────────────────────────────────────────────────
-// Add a product to cart. Increments quantity if the item already exists.
 const addToCart = async (req, res) => {
   try {
     const {
@@ -388,8 +297,7 @@ const removeCartItem = async (req, res) => {
       // Remove coupon if it no longer exists or minimum amount is not satisfied
       if (
         !coupon ||
-        (coupon.minimumOrderAmount &&
-          cartTotal < coupon.minimumOrderAmount)
+        (coupon.minimumOrderAmount && cartTotal < coupon.minimumOrderAmount)
       ) {
         cart.appliedCoupon = undefined;
       }
