@@ -99,26 +99,26 @@ export const login = async (req, res) => {
     const token = generateToken(user);
 
     // ✅ Set as httpOnly cookie (Next.js middleware reads this)
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   sameSite: "none",
-    //   maxAge:
-    //     user.role === "admin"
-    //       ? 2 * 60 * 60 * 1000 // 2 hours for admin
-    //       : 7 * 24 * 60 * 60 * 1000, // 7 days for user
-    // });
-
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
+      sameSite: "none",
       maxAge:
         user.role === "admin"
           ? 2 * 60 * 60 * 1000 // 2 hours for admin
           : 7 * 24 * 60 * 60 * 1000, // 7 days for user
     });
+
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   path: "/",
+    //   maxAge:
+    //     user.role === "admin"
+    //       ? 2 * 60 * 60 * 1000 // 2 hours for admin
+    //       : 7 * 24 * 60 * 60 * 1000, // 7 days for user
+    // });
 
     return res.status(200).json({
       success: true,
@@ -145,17 +145,17 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // Use the same value as when setting the cookie
-  });
-
-  //   res.clearCookie("token", {
+  // res.clearCookie("token", {
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === "production",
-  //   sameSite: "none", // Use the same value as when setting the cookie
+  //   sameSite: "lax", // Use the same value as when setting the cookie
   // });
+
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none", // Use the same value as when setting the cookie
+  });
 
   return res.status(200).json({
     success: true,
