@@ -28,6 +28,11 @@ import adminStoreRoutes from "./routes/admin/adminStore.routes.js";
 import storeRoutes from "./routes/store.routes.js";
 import invoiceRoutes from "./routes/invoice.routes.js";
 import aiRoutes from "./routes/admin/ai.routes.js";
+import {
+  apiLimiter,
+  authLimiter,
+  paymentLimiter,
+} from "./middlewares/rateLimiter.middleware.js";
 
 connectDB();
 
@@ -43,6 +48,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(apiLimiter);
 app.use(
   "/api/payment/webhook",
   express.raw({
@@ -51,7 +57,7 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/wishlist", wishlistRoutes);
@@ -63,7 +69,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/admin/customers", customerRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/coupons", couponRoutes);
-app.use("/api/payment", paymentRoutes);
+app.use("/api/payment", paymentLimiter, paymentRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/refunds", refundRoutes);
 app.use("/api/admin/refunds", adminRefundRoutes);
@@ -71,7 +77,7 @@ app.use("/api/admin/analytics", analyticsRoutes);
 app.use("/api/admin/store", adminStoreRoutes);
 app.use("/api/store", storeRoutes);
 app.use("/api/invoices", invoiceRoutes);
-app.use("/api/admin/ai", aiRoutes);
+app.use("/api/admin/ai", aiRoutes, aiRoutes);
 
 // console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 const PORT = process.env.PORT || 5000;
