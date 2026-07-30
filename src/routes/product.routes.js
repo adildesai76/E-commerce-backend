@@ -22,16 +22,16 @@ router.post("/", upload.array("images", 5), verifyAdminToken, createProduct);
 
 router.put("/:id", upload.array("images", 5), verifyAdminToken, updateProduct);
 
-router.get("/", verifyAnyToken, getProducts);
+router.get("/", getProducts);
 
 router.get("/a/", verifyAdminToken, getallProducts);
 
-router.get("/:id", verifyAnyToken, getProductById);
+router.get("/:id", getProductById);
 
 router.delete("/:id", verifyAdminToken, deleteProduct);
 
-router.post("/by-ids", verifyAnyToken, getProductsByIds);
+router.post("/by-ids", getProductsByIds);
 
-router.get("/:id/similar", verifyAnyToken, getSimilarProducts);
+router.get("/:id/similar", getSimilarProducts);
 
 export default router;
