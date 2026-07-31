@@ -1,7 +1,8 @@
 // controllers/cart.controller.js
 
 import Cart from "../models/Cart.js";
-
+import Product from "../models/Product.js";
+import Coupon from "../models/Coupon.js"
 import AdminStore from "../models/AdminSetting.js";
 
 const getCart = async (req, res) => {
